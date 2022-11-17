@@ -42,7 +42,7 @@ const { addAlert, removeAlert } = useAlerts();
 const _isVeBalPool = isVeBalPool(poolId);
 
 //#region pool query
-const poolQuery = usePoolQuery(poolId, undefined, undefined, t);
+const poolQuery = usePoolQuery(poolId, undefined, undefined, true);
 console.log(poolQuery)
 const pool = computed(() => poolQuery.data.value);
 const poolQueryLoading = computed(

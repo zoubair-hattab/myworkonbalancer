@@ -74,7 +74,8 @@ export type Pools = {
 
 const POOLS_GOERLI: Pools = {
   IdsMap: {
-    staBAL: '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+    staBAL:
+      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
     bbAaveUSD: {
       v1: '',
       v2: '',
@@ -97,11 +98,13 @@ const POOLS_GOERLI: Pools = {
   ExcludedPoolTypes: ['Element', 'AaveLinear', 'Linear', 'ERC4626Linear', 'FX'],
   Stable: {
     AllowList: [
-	'0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000'],
+      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+    ],
   },
   Investment: {
     AllowList: [
-	'0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000'],
+      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+    ],
   },
   Factories: {
     '0xab5D2bec9e159879267546A419eE208bD36E35cC': 'oracleWeightedPool',
@@ -116,11 +119,11 @@ const POOLS_GOERLI: Pools = {
   },
   Stakable: {
     AllowList: [
-	'0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000'
-	],
+      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+    ],
   },
   Metadata: {
-    '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f': {
+    '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000': {
       name: 'Balancer Boosted Aave USD',
       hasIcon: false,
     },

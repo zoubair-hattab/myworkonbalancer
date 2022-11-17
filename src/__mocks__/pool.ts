@@ -34,7 +34,7 @@ export const PoolMock: Pool = {
   name: 'GRO-WETH',
   factory: '0x8e9aa87e45e92bad84d5f8dd1bff34fb92637de9',
   id: '0x702605f43471183158938c1a3e5f5a359d7b31ba00020000000000000000009f',
-  owner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
+  owner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
   poolType: PoolType.Weighted,
   swapFee: '0.0037',
   tokens: [
@@ -80,7 +80,7 @@ export const BoostedPoolMock: Pool = {
   totalSwapVolume: '260432002.4421270620735632848253712',
   totalSwapFee: '4570.865566672696168181339511309256',
   totalShares: '129467502.524175958648827523',
-  owner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
+  owner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
   factory: '0xf9ac7b9df2b3454e841110cce5550bd5ac6f875f',
   createTime: 1662537668,
   symbol: 'bb-a-USD',
