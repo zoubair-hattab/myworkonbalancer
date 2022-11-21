@@ -321,8 +321,6 @@ export function tokenTreeLeafs(
  * @summary Check if pool should be accessible in UI
  */
 export function isBlocked(pool: Pool, account: string): boolean {
-  const requiresAllowlisting =
-    isStableLike(pool.poolType) || isManaged(pool.poolType);
   const isOwnedByUser =
     isAddress(account) && isSameAddress(pool.owner, account);
   const isAllowlisted =
@@ -330,7 +328,7 @@ export function isBlocked(pool: Pool, account: string): boolean {
     POOLS.Investment.AllowList.includes(pool.id);
 
   return (
-    !isTestnet.value && requiresAllowlisting && !isAllowlisted && !isOwnedByUser
+    !isTestnet.value  && !isAllowlisted && !isOwnedByUser
   );
 }
 
