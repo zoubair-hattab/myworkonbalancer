@@ -99,6 +99,7 @@ const POOLS_GOERLI: Pools = {
   Stable: {
     AllowList: [
       '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+      '0x46f87331116a32a4583594c1df38a391f8a80feb000200000000000000000012'
     ],
   },
   Investment: {
@@ -120,6 +121,7 @@ const POOLS_GOERLI: Pools = {
   Stakable: {
     AllowList: [
       '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+      '0x46f87331116a32a4583594c1df38a391f8a80feb000200000000000000000012'
     ],
   },
   Metadata: {
