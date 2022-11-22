@@ -108,7 +108,7 @@ const POOLS_GOERLI: Pools = {
     ],
   },
   Factories: {
-    '0xab5D2bec9e159879267546A419eE208bD36E35cC': 'oracleWeightedPool',
+    '0x5490cc8E37244F4F883378B6e76179914d809537': 'oracleWeightedPool',
     '0x04C14398c914F3FABa5056912D70fDeBdC756cab': 'weightedPool',
     '0x37b2367DECcF8081e7320948B5446C2340dcd467': 'stablePool',
     '0x7874D12B72d8935414e9f99d244B59b0C1f12f9E': 'stablePool', // Metastable
