@@ -114,14 +114,12 @@ const POOLS_GOERLI: Pools = {
     '0x7874D12B72d8935414e9f99d244B59b0C1f12f9E': 'stablePool', // Metastable
     '0xCeee2ad994c0470EF0d62824c2029E22dcEFE752': 'liquidityBootstrappingPool',
     '0xF4dC3349D21C68790cB7b3f82D4Fb81213C52B19': 'liquidityBootstrappingPool', // LBP (zero protocol fee)
-    '0x41e9036ae350baedcc7107760a020dca3c0731ec': 'boostedPool',
+    '0x07781ba852a1E444A38FE5daDD559093C573A351': 'boostedPool',
     '0xb848f50141f3d4255b37ac288c25c109104f2158': 'composableStablePool',
     '0xa84072c1f39A82029d045f1815F9a3829C48713b': 'weightedPool', // weighted pool v2
   },
   Stakable: {
     AllowList: [
-      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
-      '0x46f87331116a32a4583594c1df38a391f8a80feb000200000000000000000012'
     ],
   },
   Metadata: {
