@@ -327,7 +327,7 @@ export function isBlocked(pool: Pool, account: string): boolean {
     POOLS.Investment.AllowList.includes(pool.id);
 
   return (
-    !isTestnet.value  && !isOwnedByUser
+    !isTestnet.value  && !isAllowlisted
   );
 }
 
