@@ -8,6 +8,13 @@ export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 1; // 1
 // These can arise from pools with extremely low balances (e.g., completed LBPs)
 export const APR_THRESHOLD = 10_000;
 
+/**
+ * For proportional exits from ComposableStable pools the ExactBPTInForTokensOut
+ * exit type was removed. Therefore we have to use BPTInForExactTokensOut which
+ * makes proportional exits using a user's total BPT balance impossible. In
+ * order to 'fix' this we need to subtract a little bit from the bptIn value
+ * when calculating the ExactTokensOut. The variable below is that "little bit".
+ */
 export const SHALLOW_COMPOSABLE_STABLE_BUFFER = 1e9; // EVM scale, so this is 1 Gwei
 
 export type FactoryType =
@@ -75,19 +82,19 @@ export type Pools = {
 const POOLS_GOERLI: Pools = {
   IdsMap: {
     staBAL:
-      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+      '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
     bbAaveUSD: {
-      v1: '',
-      v2: '',
+      v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+      v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
     },
-    veBAL: '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
+    veBAL: '0xf8a0623ab66f985effc1c69d05f1af4badb01b00000200000000000000000060',
   },
   Pagination: {
-    PerPage: 10,
-    PerPool: 10,
-    PerPoolInitial: 5,
+    PerPage: 6,
+    PerPool: 6,
+    PerPoolInitial: 3,
   },
-  DelegateOwner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
   ZeroAddress: '0x0000000000000000000000000000000000000000',
   DynamicFees: {
     Gauntlet: [],
@@ -95,49 +102,53 @@ const POOLS_GOERLI: Pools = {
   BlockList: [
     '0x22d398c68030ef6b1c55321cca6e0cecc5c93b2f000200000000000000000678',
   ],
-  ExcludedPoolTypes: ['Element', 'AaveLinear', 'Linear', 'ERC4626Linear', 'FX'],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
   Stable: {
     AllowList: [
-      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
-      '0x46f87331116a32a4583594c1df38a391f8a80feb000200000000000000000012'
+      '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+      '0xb60e46d90f2de35f7062a27d3a98749414036d5d000200000000000000000061',
+      '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
+      '0xc957b1acceb21707b782eb8eee2ed8e20088463d000200000000000000000076',
+      '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
+      '0x14f93df8a4e37bfdb49d2cec4789df7a010603d700000000000000000000011d',
+      '0x00a62d31b6c776b6813543bc99ff265f7222dbe100000000000000000000011e',
+      '0x0c925fce89a22e36ebd9b3c6e0262234e853d2f600000000000000000000019c',
     ],
   },
   Investment: {
-    AllowList: [
-      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
-      '0x0515facb18db0435c2e43bf731616a2c0c4ef68900020000000000000000000b',
-      '0x17739dd5ec51977da842fbad7d1a878182a4297100010000000000000000000f',
-      '0x2d2b0f358df1b6c3837fd6b6a5e5d47e5aa0c97d000200000000000000000013',
-      '0x32c8577ff4a3945bf70596cac4cb11d64221de3b00020000000000000000000a',
-      '0x46f87331116a32a4583594c1df38a391f8a80feb000200000000000000000012',
-      '0x475556762f95deffb37a90c58ad3e84a2e621462000200000000000000000007',
-      '0xadb515cd31118be8d788991ee473e5f67395e96e000200000000000000000001'    ],
+    AllowList: [],
   },
   Factories: {
-    '0x5490cc8E37244F4F883378B6e76179914d809537': 'oracleWeightedPool',
-    '0x04C14398c914F3FABa5056912D70fDeBdC756cab': 'weightedPool',
-    '0x37b2367DECcF8081e7320948B5446C2340dcd467': 'stablePool',
-    '0x7874D12B72d8935414e9f99d244B59b0C1f12f9E': 'stablePool', // Metastable
-    '0xCeee2ad994c0470EF0d62824c2029E22dcEFE752': 'liquidityBootstrappingPool',
-    '0xF4dC3349D21C68790cB7b3f82D4Fb81213C52B19': 'liquidityBootstrappingPool', // LBP (zero protocol fee)
-    '0x07781ba852a1E444A38FE5daDD559093C573A351': 'boostedPool',
-    '0x7c52f95Cd4361765071eab04258251Ec122e4C3D': 'composableStablePool',
-    '0xa84072c1f39A82029d045f1815F9a3829C48713b': 'weightedPool', // weighted pool v2
+    '0x137d4D5B368dFf4089B1c099322FaB0b0f35D5E4': 'oracleWeightedPool',
+    '0x52d03d754F9b65139b80D20ee73B5E434062bcA5': 'weightedPool',
+    '0x6D4f2D9b725e7aeCcae8B632c5C6f126319AeA8F': 'stablePool',
+    '0x478BDbc531015f71358DB5271b160E742dcaBE6c': 'stablePool', // Metastable
+    '0x29CC54a3fF0FdB5B61e940f75A3fB0784081d843': 'liquidityBootstrappingPool',
+    '0x00329230bE462fb131d96Af9C579a86F0bb20e4A': 'liquidityBootstrappingPool', // LBP (zero protocol fee)
+    '0xa3F5Fc81508440Df3F1ddf7Af61A92eD3C033429': 'boostedPool',
+    '0x4e4c96255239A324862F5760dc5227432f0653E8': 'composableStablePool',
+    '0x93Eb368a09EC7aE3079eb650A26e0db739201a14': 'weightedPool', // weighted pool v2
   },
   Stakable: {
     AllowList: [
-      '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000',
-      '0x0515facb18db0435c2e43bf731616a2c0c4ef68900020000000000000000000b',
-      '0x17739dd5ec51977da842fbad7d1a878182a4297100010000000000000000000f',
-      '0x2d2b0f358df1b6c3837fd6b6a5e5d47e5aa0c97d000200000000000000000013',
-      '0x32c8577ff4a3945bf70596cac4cb11d64221de3b00020000000000000000000a',
-      '0x46f87331116a32a4583594c1df38a391f8a80feb000200000000000000000012',
-      '0x475556762f95deffb37a90c58ad3e84a2e621462000200000000000000000007',
-      '0xadb515cd31118be8d788991ee473e5f67395e96e000200000000000000000001'
+      '0x16faf9f73748013155b7bc116a3008b57332d1e600020000000000000000005b',
+      '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+      '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
+      '0x67f8fcb9d3c463da05de1392efdbb2a87f8599ea000200000000000000000059',
     ],
   },
   Metadata: {
-    '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000': {
+    '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f': {
       name: 'Balancer Boosted Aave USD',
       hasIcon: false,
     },
@@ -159,7 +170,7 @@ const POOLS_MAINNET: Pools = {
     PerPool: 10,
     PerPoolInitial: 5,
   },
-  DelegateOwner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
   ZeroAddress: '0x0000000000000000000000000000000000000000',
   DynamicFees: {
     Gauntlet: [],
@@ -172,7 +183,9 @@ const POOLS_MAINNET: Pools = {
     'ERC4626Linear',
     'Gyro2',
     'Gyro3',
+    'GyroE',
     'FX',
+    'HighAmpComposableStable',
   ],
   Stable: {
     AllowList: [
@@ -205,8 +218,8 @@ const POOLS_MAINNET: Pools = {
     ],
   },
   Factories: {
-    '0xab5D2bec9e159879267546A419eE208bD36E35cC': 'oracleWeightedPool',
-    '0x04C14398c914F3FABa5056912D70fDeBdC756cab': 'weightedPool',
+    '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0': 'oracleWeightedPool',
+    '0x52d03d754F9b65139b80D20ee73B5E434062bcA5': 'weightedPool',
     '0xc66ba2b6595d3613ccab350c886ace23866ede24': 'stablePool',
     '0x67d27634e44793fe63c467035e31ea8635117cd4': 'stablePool', // Metastable
     '0x751a0bc0e3f75b38e01cf25bfce7ff36de1c87de': 'liquidityBootstrappingPool', // Mainnet LBP
@@ -219,7 +232,74 @@ const POOLS_MAINNET: Pools = {
   },
   Stakable: {
     AllowList: [
- '0xd8f6713dfd21bfd4362979ac9c3b14950594375f000200000000000000000000'
+      '0x06df3b2bbb68adc8b0e302443692037ed9f91b42000000000000000000000063',
+      '0x072f14b85add63488ddad88f855fda4a99d6ac9b000200000000000000000027',
+      '0x0b09dea16768f0799065c475be02919503cb2a3500020000000000000000001a',
+      '0x186084ff790c65088ba694df11758fae4943ee9e000200000000000000000013',
+      '0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112',
+      '0x27c9f71cc31464b906e0006d4fcbc8900f48f15f00020000000000000000010f',
+      '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080',
+      '0x350196326aeaa9b98f1903fb5e8fc2686f85318c000200000000000000000084',
+      '0x3e5fa9518ea95c3e533eb377c001702a9aacaa32000200000000000000000052',
+      '0x51735bdfbfe3fc13dea8dc6502e2e958989429610002000000000000000000a0',
+      '0x5d66fff62c17d841935b60df5f07f6cf79bd0f4700020000000000000000014c',
+      '0x5f7fa48d765053f8dd85e052843e12d23e3d7bc50002000000000000000000c0',
+      '0x702605f43471183158938c1a3e5f5a359d7b31ba00020000000000000000009f',
+      '0x7b50775383d3d6f0215a8f290f2c9e2eebbeceb20000000000000000000000fe',
+      '0x7edde0cb05ed19e03a9a47cd5e53fc57fde1c80c0002000000000000000000c8',
+      '0x8f4205e1604133d1875a3e771ae7e4f2b086563900020000000000000000010e',
+      '0x90291319f1d4ea3ad4db0dd8fe9e12baf749e84500020000000000000000013c',
+      '0x96646936b91d6b9d7d0c47c496afbf3d6ec7b6f8000200000000000000000019',
+      '0x96ba9025311e2f47b840a1f68ed57a3df1ea8747000200000000000000000160',
+      '0xa02e4b3d18d4e6b8d18ac421fbc3dfff8933c40a00020000000000000000004b',
+      '0xa6f548df93de924d73be7d25dc02554c6bd66db500020000000000000000000e',
+      '0xbaeec99c90e3420ec6c1e7a769d2a856d2898e4d00020000000000000000008a',
+      '0xbf96189eee9357a95c7719f4f5047f76bde804e5000200000000000000000087',
+      '0xe2469f47ab58cf9cf59f9822e3c5de4950a41c49000200000000000000000089',
+      '0xe99481dc77691d8e2456e5f3f61c1810adfc1503000200000000000000000018',
+      '0xec60a5fef79a92c741cb74fdd6bfc340c0279b01000200000000000000000015',
+      '0xedf085f65b4f6c155e13155502ef925c9a756003000200000000000000000123',
+      '0xefaa1604e82e1b3af8430b90192c1b9e8197e377000200000000000000000021',
+      '0xf4c0dd9b82da36c07605df83c8a416f11724d88b000200000000000000000026',
+      '0xf5aaf7ee8c39b651cebf5f1f50c10631e78e0ef9000200000000000000000069',
+      '0xfeadd389a5c427952d8fdb8057d6c8ba1156cc56000000000000000000000066',
+      '0x92762b42a06dcdddc5b7362cfb01e631c4d44b40000200000000000000000182',
+      '0xde8c195aa41c11a0c4787372defbbddaa31306d2000200000000000000000181',
+      '0x17ddd9646a69c9445cd8a9f921d4cd93bf50d108000200000000000000000159',
+      '0xc45d42f801105e861e86658648e3678ad7aa70f900010000000000000000011e',
+      '0x2d344a84bac123660b021eebe4eb6f12ba25fe8600020000000000000000018a',
+      '0xb460daa847c45f1c4a41cb05bfb3b51c92e41b36000200000000000000000194',
+      '0x5122e01d819e58bb2e22528c0d68d310f0aa6fd7000200000000000000000163',
+      '0x851523a36690bf267bbfec389c823072d82921a90002000000000000000001ed',
+      '0xe8cc7e765647625b95f59c15848379d10b9ab4af0002000000000000000001de',
+      '0x85370d9e3bb111391cc89f6de344e801760461830002000000000000000001ef',
+      '0xa7ff759dbef9f3efdd1d59beee44b966acafe214000200000000000000000180',
+      '0x3f7c10701b14197e2695dec6428a2ca4cf7fc3b800020000000000000000023c',
+      '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d',
+      '0x178e029173417b1f9c8bc16dcec6f697bc32374600000000000000000000025d',
+      '0xcfca23ca9ca720b6e98e3eb9b6aa0ffc4a5c08b9000200000000000000000274',
+      '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249',
+      '0x0578292cb20a443ba1cde459c985ce14ca2bdee5000100000000000000000269',
+      '0x8eb6c82c3081bbbd45dcac5afa631aac53478b7c000100000000000000000270',
+      '0x1b65fe4881800b91d4277ba738b567cbb200a60d0002000000000000000002cc',
+      '0x99a14324cfd525a34bbc93ac7e348929909d57fd00020000000000000000030e',
+      '0x9b532ab955417afd0d012eb9f7389457cd0ea712000000000000000000000338',
+      '0x48607651416a943bf5ac71c41be1420538e78f87000200000000000000000327',
+      '0x6a5ead5433a50472642cd268e584dafa5a394490000200000000000000000366',
+      '0x0fd5663d4893ae0d579d580584806aadd2dd0b8b000200000000000000000367',
+      '0x441b8a1980f2f2e43a9397099d15cc2fe6d3625000020000000000000000035f',
+      '0xf3aeb3abba741f0eece8a1b1d2f11b85899951cb000200000000000000000351',
+      '0xa13a9247ea42d743238089903570127dda72fe4400000000000000000000035d',
+      '0x496ff26b76b8d23bbc6cf1df1eee4a48795490f7000200000000000000000377',
+      '0x5b3240b6be3e7487d61cd1afdfc7fe4fa1d81e6400000000000000000000037b',
+      '0x334c96d792e4b26b841d28f53235281cec1be1f200020000000000000000038a',
+      '0x25accb7943fd73dda5e23ba6329085a3c24bfb6a000200000000000000000387',
+      '0xae7bfd6fa54259fc477879712eebe34164d3a84f000200000000000000000376',
+      '0xe340ebfcaa544da8bb1ee9005f1a346d50ec422e000200000000000000000396',
+      '0x4ce0bd7debf13434d3ae127430e9bd4291bfb61f00020000000000000000038b',
+      '0x8e85e97ed19c0fa13b2549309965291fbbc0048b0000000000000000000003ba',
+      '0x173063a30e095313eee39411f07e95a8a806014e0002000000000000000003ab',
+      '0x8167a1117691f39e05e9131cfa88f0e3a620e96700020000000000000000038c',
     ],
   },
   Metadata: {
@@ -263,7 +343,7 @@ const POOLS_POLYGON: Pools = {
     PerPool: 10,
     PerPoolInitial: 5,
   },
-  DelegateOwner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
   ZeroAddress: '0x0000000000000000000000000000000000000000',
   DynamicFees: {
     Gauntlet: [],
@@ -276,7 +356,9 @@ const POOLS_POLYGON: Pools = {
     'ERC4626Linear',
     'Gyro2',
     'Gyro3',
+    'GyroE',
     'FX',
+    'HighAmpComposableStable',
   ],
   Stable: {
     AllowList: [
@@ -310,14 +392,15 @@ const POOLS_POLYGON: Pools = {
       '0x9e0a3a9b5a4e0b6dc299a56ef19002f23842be8d000000000000000000000862', // 2mxn
       '0x05f21bacc4fd8590d1eaca9830a64b66a733316c00000000000000000000087e', // tetuQI
       '0x02d2e2d7a89d6c5cb3681cfcb6f7dac02a55eda400000000000000000000088f', // csMatic
+      '0xe22483774bd8611be2ad2f4194078dac9159f4ba0000000000000000000008f0', // 2BRL
     ],
   },
   Investment: {
     AllowList: [''],
   },
   Factories: {
-    '0xab5D2bec9e159879267546A419eE208bD36E35cC': 'oracleWeightedPool',
-    '0x04C14398c914F3FABa5056912D70fDeBdC756cab': 'weightedPool',
+    '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0': 'oracleWeightedPool',
+    '0x52d03d754F9b65139b80D20ee73B5E434062bcA5': 'weightedPool',
     '0xc66ba2b6595d3613ccab350c886ace23866ede24': 'stablePool',
     '0xdae7e32adc5d490a43ccba1f0c736033f2b4efca': 'stablePool', // Metastable
     '0x751a0bc0e3f75b38e01cf25bfce7ff36de1c87de': 'liquidityBootstrappingPool', // LBP
@@ -362,7 +445,12 @@ const POOLS_POLYGON: Pools = {
       '0x4973f591784d9c94052a6c3ebd553fcd37bb0e5500020000000000000000087f',
     ],
   },
-  Metadata: {},
+  Metadata: {
+    '0x48e6b98ef6329f8f0a30ebb8c7c960330d64808500000000000000000000075b': {
+      name: 'Balancer Boosted Aave USD (Polygon)',
+      hasIcon: true,
+    },
+  },
 };
 
 const POOLS_ARBITRUM: Pools = {
@@ -372,13 +460,23 @@ const POOLS_ARBITRUM: Pools = {
     PerPool: 10,
     PerPoolInitial: 5,
   },
-  DelegateOwner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
   ZeroAddress: '0x0000000000000000000000000000000000000000',
   DynamicFees: {
     Gauntlet: [],
   },
   BlockList: [''],
-  ExcludedPoolTypes: ['Element', 'AaveLinear', 'Linear', 'ERC4626Linear', 'FX'],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
   Stable: {
     AllowList: [
       '0x9be7de742865d021c0e8fb9d64311b2c040c1ec1000200000000000000000012', // arbitrum
@@ -441,13 +539,23 @@ const POOLS_GENERIC: Pools = {
     PerPool: 10,
     PerPoolInitial: 5,
   },
-  DelegateOwner: '0x3Ae6925BF849A5f60a4FE9c20BB06c1a4E0dd780',
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
   ZeroAddress: '0x0000000000000000000000000000000000000000',
   DynamicFees: {
     Gauntlet: [],
   },
   BlockList: [''],
-  ExcludedPoolTypes: ['Element', 'AaveLinear', 'Linear', 'ERC4626Linear', 'FX'],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
   Stable: {
     AllowList: [
       '0x06df3b2bbb68adc8b0e302443692037ed9f91b42000000000000000000000063',
@@ -476,8 +584,8 @@ const POOLS_GENERIC: Pools = {
     ],
   },
   Factories: {
-    '0xab5D2bec9e159879267546A419eE208bD36E35cC': 'oracleWeightedPool',
-    '0x04C14398c914F3FABa5056912D70fDeBdC756cab': 'weightedPool',
+    '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0': 'oracleWeightedPool',
+    '0x52d03d754F9b65139b80D20ee73B5E434062bcA5': 'weightedPool',
     '0xc66ba2b6595d3613ccab350c886ace23866ede24': 'stablePool',
     '0x67d27634e44793fe63c467035e31ea8635117cd4': 'stablePool', // Metastable
     '0x7dfdef5f355096603419239ce743bfaf1120312b': 'weightedPool', // Arbitrum Weighted
